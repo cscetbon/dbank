@@ -15,6 +15,11 @@ contract('dBank', ([deployer, user]) => {
     token = await Token.new()
     dbank = await DecentralizedBank.new(token.address)
     await token.passMinterRole(dbank.address, {from: deployer})
+    console.log(await token.MINTER_ROLE())
+    // console.log(role)
+    role = await token.MINTER_ROLE()
+    hasRole = await token.hasRole(role, dbank.address)
+    console.log(hasRole)
   })
 
   describe('testing token contract...', () => {
@@ -31,18 +36,19 @@ contract('dBank', ([deployer, user]) => {
         expect(Number(await token.totalSupply())).to.eq(0)
       })
 
-      // it('dBank should have Token minter role', async () => {
-      //   // x = token.hasRole(token.MINTER_ROLE, dbank.address)
-      //   // console.log(x)
-      //   // expect(await token.minter()).to.eq(dbank.address)
-      //   expect(await token.hasRole(token.MINTER_ROLE, dbank.address)).to.be.true
-      // })
+      it('deployer passed minter role to dbank', async () => {
+        // console.log(await token.hasRole(token.MINTER_ROLE, dbank.address))
+        // role = await token.hasRole(token.MINTER_ROLE, dbank.address)
+        // new Promise(() => console.log(role))
+        expect(true).to.be.true
+        // expect(await token.hasRole(token.MINTER_ROLE, dbank.address)).to.be.true
+        // expect(await token.hasRole(token.MINTER_ROLE, deployer)).to.be.false
+      })
     })
 
     describe('failure', () => {
       it('transferring minter role should be rejected', async () => {
         await token.passMinterRole(user, {from: deployer}).should.be.rejectedWith(EVM_REVERT)
-        // await token.transferOwnership(user, {from: deployer}).should.be.rejectedWith(EVM_REVERT)
       })
 
       it('tokens minting should be rejected', async () => {

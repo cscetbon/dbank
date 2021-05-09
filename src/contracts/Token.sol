@@ -17,12 +17,10 @@ contract Token is ERC20, ERC20Burnable, AccessControl {
     require(hasRole(MINTER_ROLE, msg.sender), 'Error, only minter can pass role');
     grantRole(MINTER_ROLE, dBank);
     renounceRole(MINTER_ROLE, msg.sender);
-
     return true;
   }
 
   function mint(address account, uint256 amount) public {
-    //check if msg.sender have minter role
     require(hasRole(MINTER_ROLE, msg.sender), 'Error, only minter can mint tokens');
     _mint(account, amount);
 	}
