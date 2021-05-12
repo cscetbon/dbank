@@ -1,5 +1,5 @@
-import { assert, expect } from 'chai'
-import { tokens, ether, ETHER_ADDRESS, EVM_REVERT, wait } from './helpers'
+import { expect } from 'chai'
+import { EVM_REVERT, wait } from './helpers'
 
 const Token = artifacts.require('./Token')
 const DecentralizedBank = artifacts.require('./dBank')
