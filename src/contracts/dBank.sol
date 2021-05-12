@@ -46,7 +46,7 @@ contract dBank {
     uint interest = interestPerSecond * depositTime;
 
     //send funds to user
-    token.transfer(msg.sender, userBalance); //eth back to user
+    payable(msg.sender).transfer(userBalance); //eth back to user
     token.mint(msg.sender, interest); //interest to user
 
     //reset depositer data
