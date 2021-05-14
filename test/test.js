@@ -63,7 +63,7 @@ contract('dBank', ([deployer, user]) => {
         expect(Number(await dbank.etherBalanceOf(user))).to.eq(10**16)
       })
 
-      it('deposit time should > 0', async () => {
+      it('deposit time should be > 0', async () => {
         expect(Number(await dbank.depositStart(user))).to.be.above(0)
       })
     })
