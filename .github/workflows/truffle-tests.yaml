@@ -1,0 +1,22 @@
+on: push
+name: dBank
+
+jobs:
+  truffle-tests:
+    runs-on: ubuntu-latest
+
+    services:
+      ganache:
+        image: trufflesuite/ganache-cli
+        ports:
+          - 7545:8545
+
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: npm i
+
+      - name: Run tests
+        run: npx truffle tests
