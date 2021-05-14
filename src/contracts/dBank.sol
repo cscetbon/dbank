@@ -4,6 +4,7 @@ pragma solidity ^0.8.0;
 import "./Token.sol";
 
 contract dBank {
+  uint private minDeposit = 0.01 ether;
   Token private token;
 
   //add mappings
@@ -21,7 +22,7 @@ contract dBank {
   
   function deposit() payable public {
     require(etherBalanceOf[msg.sender] == 0, 'Error, deposit already active');
-    require(msg.value>=1e16, 'Error, deposit must be >= 0.01 ETH');
+    require(msg.value >= minDeposit, 'Error, deposit must be >= 0.01 ETH');
 
     etherBalanceOf[msg.sender] = etherBalanceOf[msg.sender] + msg.value;
     depositStart[msg.sender] = depositStart[msg.sender] + block.timestamp;
@@ -30,8 +31,8 @@ contract dBank {
   }
 
   function withdraw() public {
-    require(etherBalanceOf[msg.sender]>0, 'Error, no previous deposit');
-    uint userBalance = etherBalanceOf[msg.sender]; //for event
+    require(etherBalanceOf[msg.sender] > 0, 'Error, no previous deposit');
+    uint userBalance = etherBalanceOf[msg.sender];
 
     //check user's hodl time
     uint depositTime = block.timestamp - depositStart[msg.sender];
@@ -42,7 +43,7 @@ contract dBank {
     //(etherBalanceOf[msg.sender] / 1e16) - calc. how much higher interest will be (based on deposit), e.g.:
     //for min. deposit (0.01 ETH), (etherBalanceOf[msg.sender] / 1e16) = 1 (the same, 31668017/s)
     //for deposit 0.02 ETH, (etherBalanceOf[msg.sender] / 1e16) = 2 (doubled, (2*31668017)/s)
-    uint interestPerSecond = 31668017 * (etherBalanceOf[msg.sender] / 1e16);
+    uint interestPerSecond = 31668017 * etherBalanceOf[msg.sender] / minDeposit;
     uint interest = interestPerSecond * depositTime;
 
     //send funds to user
